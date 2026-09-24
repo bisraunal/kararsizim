@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Kayıt Ol — Kararsızım{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+  <div class="form-header">
+    <h1>Aramıza Katıl</h1>
+    <p>Ücretsiz hesabını aç, kararsız kaldığında topluluğun fikrini al.</p>
+  </div>
+
+  <form method="POST" action="{% url 'register' %}">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label class="form-label" for="{{ form.username.id_for_label }}">Kullanıcı Adı *</label>
+      {{ form.username }}
+      {% if form.username.errors %}
+        <div class="form-help" style="color: #ef4444;">{{ form.username.errors.0 }}</div>
+      {% else %}
+        <div class="form-help">{{ form.username.help_text }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="{{ form.email.id_for_label }}">E-posta Adresi *</label>
+      {{ form.email }}
+      {% if form.email.errors %}
+        <div class="form-help" style="color: #ef4444;">{{ form.email.errors.0 }}</div>
+      {% else %}
+        <div class="form-help" style="color: var(--accent-mint); font-weight: 600;">E-posta adresiniz hiçbir yerde veya ankette ASLA paylaşılmaz.</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="{{ form.password1.id_for_label }}">Parola *</label>
+      {{ form.password1 }}
+      {% if form.password1.errors %}
+        <div class="form-help" style="color: #ef4444;">{{ form.password1.errors.0 }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="{{ form.password2.id_for_label }}">Parola Tekrarı *</label>
+      {{ form.password2 }}
+      {% if form.password2.errors %}
+        <div class="form-help" style="color: #ef4444;">{{ form.password2.errors.0 }}</div>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-coral" style="width: 100%; padding: 12px; margin-top: 10px;">
+      Hesap Oluştur
+    </button>
+  </form>
+
+  <div class="form-footer">
+    Zaten hesabın var mı? <a href="{% url 'login' %}">Giriş Yap</a>
+  </div>
+</div>
+{% endblock %}

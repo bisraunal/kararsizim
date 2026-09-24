@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Yeni Anket Aç — Kararsızım{% endblock %}
+
+{% block content %}
+<div class="form-card">
+  <div class="form-header">
+    <h1>Kararsızlığını Paylaş</h1>
+    <p>Topluluğa sor, en doğru kararı saniyeler içinde birlikte verin.</p>
+  </div>
+
+  <form method="POST" action="{% url 'poll_create' %}" id="poll-create-form">
+    {% csrf_token %}
+
+    <!-- Soru / Başlık -->
+    <div class="form-group">
+      <label class="form-label" for="{{ form.question.id_for_label }}">Kararsız kaldığın soru *</label>
+      {{ form.question }}
+      {% if form.question.errors %}
+        <div class="form-help" style="color: #ef4444;">{{ form.question.errors.0 }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Açıklama -->
+    <div class="form-group">
+      <label class="form-label" for="{{ form.description.id_for_label }}">Detay & Açıklama (İsteğe Bağlı)</label>
+      {{ form.description }}
+      {% if form.description.errors %}
+        <div class="form-help" style="color: #ef4444;">{{ form.description.errors.0 }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Kategori -->
+    <div class="form-group">
+      <label class="form-label" for="{{ form.category.id_for_label }}">Kategori</label>
+      {{ form.category }}
+      {% if form.category.errors %}
+        <div class="form-help" style="color: #ef4444;">{{ form.category.errors.0 }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Seçenekler -->
+    <div class="form-group" style="margin-top: 28px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <label class="form-label" style="margin-bottom: 0;">Seçenekler (En az 2, en fazla 5) *</label>
+        <span id="option-count-display" style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">2 / 5 seçenek</span>
+      </div>
+
+      <div id="options-container">
+        {% for opt in initial_options %}
+          <div class="option-input-group">
+            <span class="option-number-badge">{{ forloop.counter }}</span>
+            <input type="text"
+                   name="options[]"
+                   value="{{ opt }}"
+                   class="form-input"
+                   placeholder="Seçenek {{ forloop.counter }} metnini yazın"
+                   required
+                   maxlength="200"
+                   autocomplete="off">
+            <button type="button" class="btn-remove-option" title="Seçeneği Sil" {% if forloop.counter <= 2 %}disabled{% endif %}>&times;</button>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="options-controls">
+        <button type="button" id="add-option-btn" class="btn btn-sm btn-outline">
+          + Seçenek Ekle
+        </button>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-coral" style="width: 100%; padding: 14px; font-size: 1.05rem;">
+      Anketi Yayınla & Oylamayı Başlat
+    </button>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/poll_create.js' %}"></script>
+{% endblock %}

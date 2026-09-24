@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Kararsızım — Hızlı ve Renkli Sosyal Oylama Platformu{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  {% csrf_token %}
+  <!-- Header / Navigation -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="{% url 'poll_list' %}" class="brand">
+        <span class="brand-dot"></span>
+        Kararsızım
+      </a>
+
+      <nav class="nav-actions">
+        {% if user.is_authenticated %}
+          <a href="{% url 'poll_create' %}" class="btn btn-coral">
+            + Anket Aç
+          </a>
+          <a href="{% url 'profile' %}" class="btn btn-outline">
+            @{{ user.username }}
+          </a>
+          <a href="{% url 'logout' %}" class="btn btn-sm btn-outline" title="Çıkış Yap">
+            Çıkış
+          </a>
+        {% else %}
+          <a href="{% url 'login' %}" class="btn btn-outline">
+            Giriş Yap
+          </a>
+          <a href="{% url 'register' %}" class="btn btn-primary">
+            Kayıt Ol
+          </a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="container">
+      {% if messages %}
+        <div class="messages-container">
+          {% for message in messages %}
+            <div class="message {{ message.tags }}">
+              <span>{{ message }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; {% now "Y" %} Kararsızım — İki seçenek arasında kalma, topluluğa sor!</p>
+    </div>
+  </footer>
+
+  <script src="{% static 'js/vote.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

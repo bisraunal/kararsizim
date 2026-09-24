@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}@{{ username }} — Kararsızım Profilim{% endblock %}
+
+{% block content %}
+<div class="profile-header-card">
+  <div class="profile-info">
+    <span class="badge-category" style="margin-bottom: 8px; display: inline-block;">Profil</span>
+    <h2>@{{ username }}</h2>
+    <p style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600; margin-top: 4px;">
+      Katılım: {{ date_joined|date:"d F Y" }}
+    </p>
+  </div>
+
+  <div class="profile-stats">
+    <div class="stat-item">
+      <div class="stat-number">{{ total_polls }}</div>
+      <div class="stat-label">Açılan Anket</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">{{ total_votes_received }}</div>
+      <div class="stat-label">Alınan Toplam Oy</div>
+    </div>
+  </div>
+</div>
+
+<div class="feed-header">
+  <div class="feed-title-section">
+    <div>
+      <h2 class="feed-title" style="font-size: 1.5rem;">Benim Anketlerim</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600;">
+        Açtığın anketleri buradan takip edebilir veya yönetebilirsin.
+      </p>
+    </div>
+    <a href="{% url 'poll_create' %}" class="btn btn-coral">+ Yeni Anket Aç</a>
+  </div>
+</div>
+
+<!-- My Polls List -->
+<div class="polls-grid">
+  {% for poll in polls %}
+    <div class="poll-card">
+      <div class="poll-card-header">
+        <div class="poll-meta">
+          <span class="badge-category">{{ poll.get_category_display }}</span>
+          <span style="{% if poll.is_active %}color: var(--accent-mint);{% else %}color: #ef4444;{% endif %} font-weight: 700;">
+            {% if poll.is_active %}Oylama Açık{% else %}Oylama Kapalı{% endif %}
+          </span>
+        </div>
+        <h3 class="poll-question">
+          <a href="{% url 'poll_detail' poll.id %}">{{ poll.question }}</a>
+        </h3>
+        {% if poll.description %}
+          <p class="poll-description">{{ poll.description }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Quick Option Summary -->
+      <div style="margin: 12px 0; font-size: 0.9rem; display: flex; flex-direction: column; gap: 6px;">
+        {% for opt in poll.options.all %}
+          <div style="display: flex; justify-content: space-between; background: var(--bg-subtle); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <span style="font-weight: 600;">{{ opt.text }}</span>
+            <span style="font-weight: 700; color: var(--primary);">%{{ opt.vote_percentage }} ({{ opt.vote_count }} oy)</span>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Card Actions -->
+      <div class="poll-card-footer" style="gap: 8px;">
+        <span class="poll-total-votes">{{ poll.total_votes }} toplam oy</span>
+        
+        <div style="display: flex; gap: 6px;">
+          <!-- Toggle Status -->
+          <form method="POST" action="{% url 'toggle_poll_status' poll.id %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline" style="font-size: 0.78rem;">
+              {% if poll.is_active %}Kapat{% else %}Aç{% endif %}
+            </button>
+          </form>
+
+          <!-- Delete Poll -->
+          <form method="POST" action="{% url 'delete_poll' poll.id %}" onsubmit="return confirm('Bu anketi silmek istediğinize emin misiniz?');" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-danger" style="font-size: 0.78rem; border: none;">
+              Sil
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="empty-state">
+      <h3>Henüz Açtığın Bir Anket Yok</h3>
+      <p>İki seçenek arasında kaldığında hemen bir anket açıp topluluğun fikrini alabilirsin.</p>
+      <a href="{% url 'poll_create' %}" class="btn btn-coral">+ Hemen İlk Anketini Aç</a>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

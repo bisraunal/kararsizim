@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Kararsızım — Güncel Kararsızlıklar & Oylamalar{% endblock %}
+
+{% block content %}
+<div class="feed-header">
+  <div class="feed-title-section">
+    <div>
+      <h1 class="feed-title">Topluluğun Kararları</h1>
+      <p style="color: var(--text-muted); font-weight: 600; margin-top: 4px;">
+        Seçeneklere tıkla, oyunu ver veya yeni bir kararsızlık ekle.
+      </p>
+    </div>
+
+    <!-- Search Box -->
+    <form method="GET" action="{% url 'poll_list' %}" class="search-form">
+      {% if current_filter %}<input type="hidden" name="filter" value="{{ current_filter }}">{% endif %}
+      {% if current_category %}<input type="hidden" name="category" value="{{ current_category }}">{% endif %}
+      <input type="text" name="q" value="{{ search_query }}" placeholder="Anketlerde ara..." class="search-input" autocomplete="off">
+      <button type="submit" class="btn btn-primary btn-sm">Ara</button>
+      {% if search_query %}
+        <a href="{% url 'poll_list' %}" class="btn btn-outline btn-sm">Temizle</a>
+      {% endif %}
+    </form>
+  </div>
+
+  <!-- Filters and Categories -->
+  <div class="filter-bar">
+    <div class="sort-tabs">
+      <a href="?filter=latest{% if current_category %}&category={{ current_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
+         class="tab-pill {% if current_filter == 'latest' %}active{% endif %}">
+        En Yeniler
+      </a>
+      <a href="?filter=popular{% if current_category %}&category={{ current_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
+         class="tab-pill {% if current_filter == 'popular' %}active{% endif %}">
+        Popülerler
+      </a>
+    </div>
+
+    <div class="category-tabs">
+      <a href="?filter={{ current_filter }}{% if search_query %}&q={{ search_query }}{% endif %}"
+         class="tab-pill {% if not current_category %}active{% endif %}">
+        Tümü
+      </a>
+      {% for cat_key, cat_name in categories %}
+        <a href="?filter={{ current_filter }}&category={{ cat_key }}{% if search_query %}&q={{ search_query }}{% endif %}"
+           class="tab-pill {% if current_category == cat_key %}active{% endif %}">
+          {{ cat_name }}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- Polls Grid -->
+<div class="polls-grid">
+  {% for item in polls_data %}
+    <div class="poll-card" data-poll-id="{{ item.poll.id }}">
+      <div class="poll-card-header">
+        <div class="poll-meta">
+          <span class="badge-category">{{ item.poll.get_category_display }}</span>
+          <span>@{{ item.poll.user.username }} &bull; {{ item.poll.created_at|timesince }} önce</span>
+        </div>
+        <h2 class="poll-question">
+          <a href="{% url 'poll_detail' item.poll.id %}">{{ item.poll.question }}</a>
+        </h2>
+        {% if item.poll.description %}
+          <p class="poll-description">{{ item.poll.description }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Poll Options -->
+      <div class="poll-options">
+        {% for opt in item.options %}
+          <button type="button"
+                  class="option-btn {% if opt.is_chosen %}chosen{% endif %}"
+                  data-option-id="{{ opt.id }}"
+                  {% if item.user_voted %}disabled{% endif %}>
+            
+            {% if item.user_voted %}
+              <div class="option-progress-bar" style="width: {{ opt.percentage }}%;"></div>
+            {% endif %}
+
+            <span class="option-text">{{ opt.text }}</span>
+
+            {% if item.user_voted %}
+              <div class="option-stats">
+                {% if opt.is_chosen %}
+                  <span class="chosen-mark">Oyunuz</span>
+                {% endif %}
+                <span>%{{ opt.percentage }}</span>
+              </div>
+            {% endif %}
+          </button>
+        {% endfor %}
+      </div>
+
+      <!-- Card Footer -->
+      <div class="poll-card-footer">
+        <span class="poll-total-votes">{{ item.total_votes }} oy</span>
+        <div class="poll-card-status">
+          {% if item.user_voted %}
+            <span class="voted-badge">Oy Verildi</span>
+          {% else %}
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Oy vermek için tıkla</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="empty-state">
+      <h3>Henüz Anket Bulunamadı</h3>
+      <p>Bu arama veya kategori için gösterilecek anket yok. İlk kararsızlığı sen paylaşabilirsin!</p>
+      {% if user.is_authenticated %}
+        <a href="{% url 'poll_create' %}" class="btn btn-coral">+ Yeni Anket Oluştur</a>
+      {% else %}
+        <a href="{% url 'register' %}" class="btn btn-primary">Hemen Kayıt Ol</a>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
