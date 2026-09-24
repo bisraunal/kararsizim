@@ -139,11 +139,11 @@ erDiagram
 
 ---
 
-## 6. 🎨 Arayüz (UI/UX) & Tasarım Konsepti
+## 6.  Arayüz (UI/UX) & Tasarım Konsepti
 
 Genç nesle hitap eden, enerjik, modern ve dikkat çekici bir görsel stil benimsenecektir:
 
-### 🌈 Renk Paleti (Canlı & Enerjik)
+###  Renk Paleti (Canlı & Enerjik)
 - **Arka Plan:** Çok açık soft krem / lavanta tonu (`#F8F9FE` veya `#F5F3FF`)
 - **Ana Vurgu Rengi (Primary):** Canlı Elektrik Moru (`#7C3AED`) / İndigo (`#6366F1`)
 - **İkincil Canlı Renkler (Accent):**
@@ -157,7 +157,7 @@ Genç nesle hitap eden, enerjik, modern ve dikkat çekici bir görsel stil benim
 
 ---
 
-## 7. 📁 Önerilen Proje Dizin Yapısı
+## 7. Önerilen Proje Dizin Yapısı
 
 ```text
 kararsizim/
