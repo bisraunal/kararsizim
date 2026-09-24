@@ -4,43 +4,52 @@
 
 {% block content %}
 <div class="feed-header">
-  <div class="feed-title-section">
-    <div>
-      <h1 class="feed-title">Topluluğun Kararları</h1>
-      <p style="color: var(--text-muted); font-weight: 600; margin-top: 4px;">
-        Seçeneklere tıkla, oyunu ver veya yeni bir kararsızlık ekle.
+  <!-- Hero Banner -->
+  <div class="hero-banner">
+    <div class="hero-content">
+      <h1>Aklında Ne Var?</h1>
+      <p>
+        İki ya da daha fazla seçenek arasında kararsız mı kaldın? Topluluğun fikrini saniyeler içinde al.
       </p>
     </div>
 
-    <!-- Search Box -->
+    <!-- Search Form -->
     <form method="GET" action="{% url 'poll_list' %}" class="search-form">
       {% if current_filter %}<input type="hidden" name="filter" value="{{ current_filter }}">{% endif %}
       {% if current_category %}<input type="hidden" name="category" value="{{ current_category }}">{% endif %}
       <input type="text" name="q" value="{{ search_query }}" placeholder="Anketlerde ara..." class="search-input" autocomplete="off">
       <button type="submit" class="btn btn-primary btn-sm">Ara</button>
       {% if search_query %}
-        <a href="{% url 'poll_list' %}" class="btn btn-outline btn-sm">Temizle</a>
+        <a href="{% url 'poll_list' %}" class="btn btn-outline btn-sm">Sıfırla</a>
       {% endif %}
     </form>
   </div>
 
-  <!-- Filters and Categories -->
+  <!-- Filter & Category Bar -->
   <div class="filter-bar">
-    <div class="sort-tabs">
-      <a href="?filter=latest{% if current_category %}&category={{ current_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
-         class="tab-pill {% if current_filter == 'latest' %}active{% endif %}">
-        En Yeniler
-      </a>
-      <a href="?filter=popular{% if current_category %}&category={{ current_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
-         class="tab-pill {% if current_filter == 'popular' %}active{% endif %}">
-        Popülerler
-      </a>
+    <div class="filter-row">
+      <!-- Sort Tabs -->
+      <div class="sort-tabs">
+        <a href="?filter=latest{% if current_category %}&category={{ current_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
+           class="tab-pill {% if current_filter == 'latest' %}active{% endif %}">
+          En Yeniler
+        </a>
+        <a href="?filter=popular{% if current_category %}&category={{ current_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
+           class="tab-pill {% if current_filter == 'popular' %}active{% endif %}">
+          Popülerler
+        </a>
+      </div>
+
+      {% if user.is_authenticated %}
+        <a href="{% url 'poll_create' %}" class="btn btn-sm btn-coral">+ Yeni Anket Oluştur</a>
+      {% endif %}
     </div>
 
+    <!-- Category Chips -->
     <div class="category-tabs">
       <a href="?filter={{ current_filter }}{% if search_query %}&q={{ search_query }}{% endif %}"
          class="tab-pill {% if not current_category %}active{% endif %}">
-        Tümü
+        Tüm Kategoriler
       </a>
       {% for cat_key, cat_name in categories %}
         <a href="?filter={{ current_filter }}&category={{ cat_key }}{% if search_query %}&q={{ search_query }}{% endif %}"
@@ -69,7 +78,7 @@
         {% endif %}
       </div>
 
-      <!-- Poll Options -->
+      <!-- Poll Options with Smooth Progress Fills -->
       <div class="poll-options">
         {% for opt in item.options %}
           <button type="button"
@@ -110,9 +119,9 @@
   {% empty %}
     <div class="empty-state">
       <h3>Henüz Anket Bulunamadı</h3>
-      <p>Bu arama veya kategori için gösterilecek anket yok. İlk kararsızlığı sen paylaşabilirsin!</p>
+      <p>Bu arama veya kategori için gösterilecek anket bulunmuyor. İlk kararsızlığı sen paylaşabilirsin!</p>
       {% if user.is_authenticated %}
-        <a href="{% url 'poll_create' %}" class="btn btn-coral">+ Yeni Anket Oluştur</a>
+        <a href="{% url 'poll_create' %}" class="btn btn-coral">+ Yeni Anket Aç</a>
       {% else %}
         <a href="{% url 'register' %}" class="btn btn-primary">Hemen Kayıt Ol</a>
       {% endif %}

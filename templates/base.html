@@ -4,21 +4,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Kararsızım — Hızlı ve Renkli Sosyal Oylama Platformu{% endblock %}</title>
+  <title>{% block title %}Kararsızım — Sosyal Karar Verme Platformu{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   {% block extra_head %}{% endblock %}
 </head>
 <body>
   {% csrf_token %}
-  <!-- Header / Navigation -->
+  
+  <!-- Modern Navbar -->
   <header class="navbar">
     <div class="container navbar-inner">
       <a href="{% url 'poll_list' %}" class="brand">
-        <span class="brand-dot"></span>
-        Kararsızım
+        <span class="brand-badge">K</span>
+        <span>Karar<span class="brand-text-accent">sızım</span></span>
       </a>
 
       <nav class="nav-actions">
@@ -44,7 +45,7 @@
     </div>
   </header>
 
-  <!-- Main Content -->
+  <!-- Main Content Area -->
   <main>
     <div class="container">
       {% if messages %}
@@ -61,10 +62,10 @@
     </div>
   </main>
 
-  <!-- Footer -->
+  <!-- Modern Footer -->
   <footer class="footer">
     <div class="container">
-      <p>&copy; {% now "Y" %} Kararsızım — İki seçenek arasında kalma, topluluğa sor!</p>
+      <p>&copy; {% now "Y" %} Kararsızım &bull; Hızlı, eğlenceli ve sade sosyal oylama.</p>
     </div>
   </footer>
 
