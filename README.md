@@ -2,7 +2,7 @@
 
 ---
 
-## 1. 📌 Proje Genel Bakışı & Amacı
+## 1. Proje Genel Bakışı & Amacı
 **Kararsızım**, günlük hayatta iki ya da daha fazla seçenek arasında kararsız kalan insanların ("Bugün sinemaya mı gitsem, restorana mı?", "Hangi telefonu alsam?", "Hangi filmi izlesem?") hızlıca anket açıp topluluğun fikrini alabildiği, genç, dinamik ve renkli bir sosyal oylama platformudur.
 
 - **Ana Felsefe:** Hızlı, eğlenceli, sade ve zahmetsiz etkileşim.
@@ -10,7 +10,7 @@
 
 ---
 
-## 2. 👥 Kullanıcı Rolleri & Yetkilendirme
+## 2. Kullanıcı Rolleri & Yetkilendirme
 
 | Özellik | Ziyaretçi (Giriş Yapmamış) | Kayıtlı Kullanıcı |
 | :--- | :---: | :---: |
@@ -20,7 +20,7 @@
 | **Yeni Anket Oluşturma** |  Hayır (Kayıt olmaya yönlendirilir) |  Evet |
 | **Kendi Anketlerini Yönetme** |  Hayır |  Evet |
 
-### 🔐 Kayıt ve Gizlilik Kuralları:
+### Kayıt ve Gizlilik Kuralları:
 - **Kayıt Alanları:** `Kullanıcı Adı (username)`, `E-posta (email)`, `Parola (password)`.
 - **Gizlilik:** Kullanıcının e-posta adresi hiçbir arayüzde veya ankette **asla gösterilmez**.
 - **Görünürlük:** Anket kartlarında ve detaylarında sadece kullanıcının seçtiği `@kullanici_adi` görünür.
@@ -28,7 +28,7 @@
 
 ---
 
-## 3. ⚙️ Temel Fonksiyonel Özellikler
+## 3.  Temel Fonksiyonel Özellikler
 
 ### 3.1. Anket Oluşturma (Sadece Giriş Yapmış Kullanıcılar)
 - **Başlık/Soru:** Kullanıcının kararsız kaldığı soru (Maksimum 250 karakter).
